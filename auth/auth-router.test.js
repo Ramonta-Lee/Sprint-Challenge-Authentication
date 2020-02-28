@@ -34,12 +34,19 @@ describe("auth router", () => {
   });
 
   describe("POST /login", () => {
-    it("should login a user", () => {
+    it("should login a user and then reach get the jokes", () => {
       return request(server)
         .post("/api/auth/login")
         .send({ username: "JestTest2", password: "Tester2" })
         .then(res => {
-          expect(res.status).toBe(200);
+         const currentToken = res.body.token;
+         return request(server)
+         .get("/api/jokes")
+         .set("Authorization", currentToken)
+         .then(res => {
+
+          expect(res.status).toBeTruthy();
+         })
         });
     });
     it("should deny login", () => {
