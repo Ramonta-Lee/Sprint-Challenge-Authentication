@@ -1,8 +1,12 @@
 const bcrypt = require("bcryptjs");
 
-const router = require('express').Router();
+const router = require("express").Router();
 
-router.post('/register', (req, res) => {
+const jwt = require("jsonwebtoken");
+
+const Users = require("../users/users-model.js");
+
+router.post("/register", (req, res) => {
   // implement registration
   let user = req.body;
 
@@ -10,10 +14,16 @@ router.post('/register', (req, res) => {
 
   user.password = hash;
 
-  
+  Users.add(user)
+    .then(saved => {
+      res.status(201).json(saved);
+    })
+    .catch(({ name, message, stack, code }) => {
+      res.status(500).json({ name, message, stack, code });
+    });
 });
 
-router.post('/login', (req, res) => {
+router.post("/login", (req, res) => {
   // implement login
 });
 
