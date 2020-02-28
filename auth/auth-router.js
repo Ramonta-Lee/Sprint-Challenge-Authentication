@@ -14,15 +14,17 @@ router.post("/register", (req, res) => {
   const hash = bcrypt.hashSync(user.password, 12);
 
   user.password = hash;
+  
 
-  Users.add(user)
-    .then(saved => {
-      res.status(201).json(saved);
-    })
+    Users.add(user)
+      .then(saved => {
+        res.status(201).json(saved);
+      })
     .catch(({ name, message, stack, code }) => {
       res.status(500).json({ name, message, stack, code });
-    });
-});
+    })
+    
+  });
 
 router.post("/login", (req, res) => {
   // implement login
